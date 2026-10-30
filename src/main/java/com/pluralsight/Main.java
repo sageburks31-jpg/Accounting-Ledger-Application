@@ -1,12 +1,19 @@
 package com.pluralsight;
 
+
+
 public class Main {
+
+
 
     private static void print(String text) {System.out.println(text);}
     private static void print(String text, boolean nextLine) {
         if (nextLine) {System.out.println(text);}
         else {System.out.print(text);}
     }
+
+    public static void readFile(){}
+    public static void writeFile(){}
 
     public static void main(String[] args) {
         runMainMenu();
