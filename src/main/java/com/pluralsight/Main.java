@@ -1,10 +1,14 @@
 package com.pluralsight;
 
-
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-
+    static Scanner scanner = new Scanner(System.in);
+    static List<transaction> transactionList = new ArrayList<>();
+    static String testReadWriteFile = "test-writer.csv";
+    static String transactionReadWriteFile = "transactions.csv";
 
     private static void print(String text) {System.out.println(text);}
     private static void print(String text, boolean nextLine) {
@@ -19,7 +23,18 @@ public class Main {
         runMainMenu();
     }
     public static void runMainMenu() {
+        String enteredCommand = "";
+        print("""
+                === Main Account Menu ===
+                (D) Add Deposit
+                (P) Make Payment
+                (L) Ledger
+                (X) Exit""");
+        do {
+            print("enter Valid command here -> ",false);
+            enteredCommand=scanner.nextLine();
 
+        } while (enteredCommand.isEmpty());
     }
     private static void addDeposit() {
 
