@@ -20,13 +20,44 @@ public class Main {
         else {System.out.print(text);}
     }
 
-    public static void readFile() {}
-    public static void writeFile() {}
+    public static void readFile() {
+        try {
+            FileReader fileReader = new FileReader(testReadWriteFile);
+            BufferedReader bufReader = new BufferedReader(fileReader);
+            String input;
+            while((input = bufReader.readLine()) != null) {
+                print(input);
+                if (!input.equals("testDate|testTime|testDescription|testVendor|testAmount")) {
+                    String[] lineSegment = input.split("\\|");
+                    Transaction product1 = new Transaction(lineSegment[0], lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
+                    transactionList.add(product1);
+                }
+            }
+            bufReader.close();
+        } catch(IOException e) {print(String.valueOf(e));}
+    }
+
+    public static void writeFile() {
+        try {
+            FileWriter fileWriter = new FileWriter(testReadWriteFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            String input;
+            bufferedWriter.append("testDate|testTime|testDescription|testVendor|testAmount");
+            bufferedWriter.newLine();
+            for (int i = 0; i <= transactionList.size() - 1; i++) {
+                //print(input);
+                bufferedWriter.write(transactionList.get(i).toRow());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch(IOException e) {print(String.valueOf(e));}
+    }
 
     public static void main(String[] args) {
         readFile();
         runMainMenu();
     }
+
     public static void runMainMenu() {
         String enteredCommand = "";
         print("""
@@ -49,6 +80,7 @@ public class Main {
                         print("Error! Invalid command found. Please enter a Valid command");
                     } else {
                         print("thank you for using our service");
+                        writeFile();
                     }
                 }
             }
@@ -79,7 +111,6 @@ public class Main {
                 }
             }
         } while (enteredCommand.isEmpty());
-
     }
 
     private static void makePayment() {}
@@ -126,6 +157,7 @@ public class Main {
             transactionList.add(transaction);
             writeFile();
             print("deposit was added to your transaction list");
+            print(transactionList.get(transactionList.size()-1).toRow());
             print("press ENTER to return to main", false);
             scanner.nextLine();
             runMainMenu();
