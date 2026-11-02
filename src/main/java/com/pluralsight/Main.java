@@ -30,6 +30,7 @@ public class Main {
     public static void runMainMenu() {
         String enteredCommand = "";
         print("""
+                
                 === Main Account Menu ===
                 (D) Add Deposit
                 (P) Make Payment
@@ -44,24 +45,25 @@ public class Main {
                 case "l" -> runLedgerMenu();
                 default -> {
                     if (!enteredCommand.equals("x")) {
+                        enteredCommand="";
                         print("Error! Invalid command found. Please enter a Valid command");
                     } else {
-                        enteredCommand="";
                         print("thank you for using our service");
                     }
                 }
             }
-        } while (!enteredCommand.isEmpty());
+        } while (enteredCommand.isEmpty());
     }
 
     private static void runLedgerMenu() {
         String enteredCommand = "";
         print("""
+                
                 === Main Ledger Menu ===
-                (D) Add Deposit
-                (P) Make Payment
-                (L) Ledger
-                (X) Exit""");
+                (D) to see All Deposits
+                (P) to see All Payments
+                (R) to see All Reports
+                (x) to return to main""");
         do {
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
@@ -71,14 +73,12 @@ public class Main {
                 case "r" -> displayAllReports();
                 default -> {
                     if (!enteredCommand.equals("x")) {
-                        print("Error! Invalid command found. Please enter a Valid command");
-                    } else {
                         enteredCommand="";
-                        print("thank you for using our service");
-                    }
+                        print("Error! Invalid command found. Please enter a Valid command");
+                    } else {runMainMenu();}
                 }
             }
-        } while (!enteredCommand.isEmpty());
+        } while (enteredCommand.isEmpty());
 
     }
 
@@ -92,11 +92,13 @@ public class Main {
         Transaction transaction;
         transaction = new Transaction();
         for (String command : commandList) {
-            print(String.format("""
-                    %s
-                    enter C to cancel and return to main menu
-                    enter here ->"""+" ",command), false);
-            enteredCommand = scanner.nextLine().trim();
+            if (!command.equals("enter amount")) {
+                print(String.format("""
+                        %s
+                        enter C to cancel and return to main menu
+                        enter here ->""" + " ", command), false);
+                enteredCommand = scanner.nextLine().trim();
+            }
             String cancelCommand=enteredCommand.toLowerCase();
             if (!cancelCommand.equals("c")) {
                 switch (command) {
@@ -107,7 +109,7 @@ public class Main {
                         transaction.setVendor(enteredCommand);
                     }
                     case "enter amount" -> {
-                        transaction.setAmount(stringToDouble(enteredCommand));
+                        transaction.setAmount(stringToDouble(command));
                     }
                 }
             } else {
@@ -122,6 +124,7 @@ public class Main {
             transaction.setDate(today.format(formatYear));
             transaction.setTime(today.format(formatHours));
             transactionList.add(transaction);
+            writeFile();
             print("deposit was added to your transaction list");
             print("press ENTER to return to main", false);
             scanner.nextLine();
@@ -136,6 +139,9 @@ public class Main {
 
     private static void displayAllReports() {
         transactionList.forEach(transaction -> print(transaction.toRow()));
+        print("press ENTER to return to main", false);
+        scanner.nextLine();
+        runLedgerMenu();
     }
 
     private static void monthToDate() {}
