@@ -41,11 +41,9 @@ public class Main {
         try {
             FileWriter fileWriter = new FileWriter(testReadWriteFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            String input;
             bufferedWriter.append("testDate|testTime|testDescription|testVendor|testAmount");
             bufferedWriter.newLine();
             for (int i = 0; i <= transactionList.size() - 1; i++) {
-                //print(input);
                 bufferedWriter.write(transactionList.get(i).toRow());
                 bufferedWriter.newLine();
             }
