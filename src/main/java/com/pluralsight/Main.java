@@ -262,12 +262,15 @@ public class Main {
                 Nov 11 | Dec 12""");
         LocalDateTime today = LocalDateTime.now();
         String[] currentDateList = today.format(formatYear).split("-");
+
         int thisYear = Integer.parseInt(currentDateList[0]);
         int thisMouth = Integer.parseInt(currentDateList[1]);
         int enterDate=stringToInteger("please enter date search mouth here -> ");
+
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.date.split("-");
             int dateOfMouth = Integer.parseInt(dateList[1]);
+
             int dateOfYear = Integer.parseInt(dateList[0]);
             if (dateOfYear == thisYear) {
                 if (dateOfMouth >= enterDate || dateOfMouth <= thisMouth) {
@@ -279,7 +282,28 @@ public class Main {
         runReportsMenu();
     }
 
-    private static void previousMonth() {}
+    private static void previousMonth() {
+        String[] mouthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        LocalDateTime today = LocalDateTime.now();
+
+        String[] currentDateList = today.format(formatYear).split("-");
+        int thisYear = Integer.parseInt(currentDateList[0]);
+        int thisMouth = Integer.parseInt(currentDateList[1]);
+
+        int dateOfMouth = thisMouth-1;
+        if (dateOfMouth == 0) {dateOfMouth=12;}
+        for (Transaction transaction: transactionList) {
+            String[] dateList = transaction.date.split("-");
+
+            int dateOfYear = Integer.parseInt(dateList[0]);
+            if (dateOfYear == thisYear) {
+                if (!(dateOfMouth > thisMouth)) print(transaction.toRow());
+            }
+        }
+        print("current month" + mouthNames[thisMouth-1] + " " + thisMouth);
+        returnToMain();
+        runReportsMenu();
+    }
 
     private static void yearToDate() {}
 
