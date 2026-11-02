@@ -63,7 +63,7 @@ public class Main {
                 === Main Account Menu ===
                 (D) Add Deposit
                 (P) Make Payment
-                (L) Ledger
+                (L) go to Ledger
                 (X) Exit""");
         do {
             print("enter Valid command here -> ",false);
@@ -93,6 +93,7 @@ public class Main {
                 (D) to see All Deposits
                 (P) to see All Payments
                 (R) to see All Reports
+                (M) to see more Report options
                 (x) to return to main""");
         do {
             print("enter Valid command here -> ",false);
@@ -118,6 +119,7 @@ public class Main {
         boolean depositIsComplete = true;
         Transaction transaction;
         transaction = new Transaction();
+
         for (String command : commandList) {
             if (!command.equals("enter amount")) {
                 print(String.format("""
@@ -181,21 +183,38 @@ public class Main {
 
         transactionList.add(transaction);
         writeFile();
-        print("deposit was added to your transaction list");
-        //print(transactionList.get(transactionList.size()-1).toRow());
-        print("press ENTER to return to main", false);
-        scanner.nextLine();
+        returnToMain();
         runMainMenu();
     }
 
-    private static void displayAllDeposits() {}
+    private static void returnToMain() {
+        print("press ENTER to return to main", false);
+        scanner.nextLine();
+    }
 
-    private static void displayAllPayments() {}
+    private static void displayAllDeposits() {
+        for (Transaction transaction: transactionList) {
+            if (transaction.getAmount()>0) {
+                print(transaction.toRow());
+            }
+        }
+        returnToMain();
+        runLedgerMenu();
+    }
+
+    private static void displayAllPayments() {
+        for (Transaction transaction: transactionList) {
+            if (transaction.getAmount()<0) {
+                print(transaction.toRow());
+            }
+        }
+        returnToMain();
+        runLedgerMenu();
+    }
 
     private static void displayAllReports() {
         transactionList.forEach(transaction -> print(transaction.toRow()));
-        print("press ENTER to return to main", false);
-        scanner.nextLine();
+        returnToMain();
         runLedgerMenu();
     }
 
