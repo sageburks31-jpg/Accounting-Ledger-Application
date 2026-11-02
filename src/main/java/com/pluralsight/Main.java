@@ -1,6 +1,9 @@
 package com.pluralsight;
 
 import java.util.*;
+import java.time.*;
+import java.time.format.*;
+import java.io.*;
 
 public class Main {
 
@@ -8,6 +11,8 @@ public class Main {
     static List<Transaction> transactionList = new ArrayList<>();
     static String testReadWriteFile = "test-writer.csv";
     static String transactionReadWriteFile = "transactions.csv";
+    static DateTimeFormatter formatYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    static DateTimeFormatter formatHours = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     private static void print(String text) {System.out.println(text);}
     private static void print(String text, boolean pushNextLine) {
@@ -49,7 +54,33 @@ public class Main {
         } while (!enteredCommand.isEmpty());
     }
 
-    private static void runLedgerMenu() {}
+    private static void runLedgerMenu() {
+        String enteredCommand = "";
+        print("""
+                === Main Ledger Menu ===
+                (D) Add Deposit
+                (P) Make Payment
+                (L) Ledger
+                (X) Exit""");
+        do {
+            print("enter Valid command here -> ",false);
+            enteredCommand=scanner.nextLine().toLowerCase().trim();
+            switch (enteredCommand){
+                case "d" -> displayAllDeposits();
+                case "p" -> displayAllPayments();
+                case "r" -> displayAllReports();
+                default -> {
+                    if (!enteredCommand.equals("x")) {
+                        print("Error! Invalid command found. Please enter a Valid command");
+                    } else {
+                        enteredCommand="";
+                        print("thank you for using our service");
+                    }
+                }
+            }
+        } while (!enteredCommand.isEmpty());
+
+    }
 
     private static void makePayment() {}
 
@@ -63,7 +94,7 @@ public class Main {
         for (String command : commandList) {
             print(String.format("""
                     %s
-                    enter (C) to cancel and return to main
+                    enter C to cancel and return to main menu
                     enter here ->"""+" ",command), false);
             enteredCommand = scanner.nextLine().trim();
             String cancelCommand=enteredCommand.toLowerCase();
@@ -76,7 +107,7 @@ public class Main {
                         transaction.setVendor(enteredCommand);
                     }
                     case "enter amount" -> {
-                        transaction.setAmount(enteredCommand);
+                        transaction.setAmount(stringToDouble(enteredCommand));
                     }
                 }
             } else {
@@ -87,7 +118,11 @@ public class Main {
         }
 
         if (depositIsComplete) {
+            LocalDateTime today = LocalDateTime.now();
+            transaction.setDate(today.format(formatYear));
+            transaction.setTime(today.format(formatHours));
             transactionList.add(transaction);
+            print("deposit was added to your transaction list");
             print("press ENTER to return to main", false);
             scanner.nextLine();
             runMainMenu();
@@ -99,13 +134,27 @@ public class Main {
 
     private static void displayAllPayments() {}
 
-    private static void displayAllReports() {}
+    private static void displayAllReports() {
+        transactionList.forEach(transaction -> print(transaction.toRow()));
+    }
 
     private static void monthToDate() {}
 
     private static void previousMonth() {}
 
     private static void yearToDate() {}
+
+    public static double stringToDouble(String prompt) {
+        while (true) {
+            print(prompt,false);
+            try {
+                return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                print("Error invalid command! Please enter a valid command");
+                stringToDouble(prompt);
+            }
+        }
+    }
 
     private static void PreviousYear() {}
 

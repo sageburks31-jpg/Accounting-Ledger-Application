@@ -6,10 +6,10 @@ public class Transaction {
     String time;
     String description;
     String vendor;
-    String amount;
+    double amount;
 
     public Transaction() {}
-    public Transaction(String date, String time, String description, String vendor, String amount) {
+    public Transaction(String date, String time, String description, String vendor, double amount) {
         this.date = date;
         this.time = time;
         this.description = description;
@@ -29,8 +29,8 @@ public class Transaction {
     public String getVendor() {return vendor;}
     public void setVendor(String vendor) {this.vendor = vendor;}
 
-    public String getAmount() {return amount;}
-    public void setAmount(String amount) {this.amount = amount;}
+    public double getAmount() {return amount;}
+    public void setAmount(double amount) {this.amount = amount;}
 
     public String toRow() {
         return date+"|"+time+"|"+description+"|"+vendor+"|"+amount;
