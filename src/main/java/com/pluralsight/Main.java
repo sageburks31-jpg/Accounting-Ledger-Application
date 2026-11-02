@@ -89,11 +89,11 @@ public class Main {
         String enteredCommand;
         print("""
                 
-                === Main Ledger Menu ===
+                === Ledger Menu ===
                 (D) to see All Deposits
                 (P) to see All Payments
-                (R) to see All Reports
-                (M) to see more Report options
+                (A) to see All Reports
+                (R) to see more Report options
                 (x) to return to main""");
         do {
             print("enter Valid command here -> ",false);
@@ -101,7 +101,8 @@ public class Main {
             switch (enteredCommand){
                 case "d" -> displayAllDeposits();
                 case "p" -> displayAllPayments();
-                case "r" -> displayAllReports();
+                case "a" -> displayAllReports();
+                case "r" -> runReportsMenu();
                 default -> {
                     if (!enteredCommand.equals("x")) {
                         enteredCommand="";
@@ -110,6 +111,37 @@ public class Main {
                 }
             }
         } while (enteredCommand.isEmpty());
+    }
+
+    private static void runReportsMenu() {
+        String enteredCommand;
+        print("""
+                
+                === Reports Menu ===
+                (1) Month To Date
+                (2) Previous Month
+                (3) Year To Date
+                (4) Previous Year
+                (5) Search by Vendor
+                (x) to return to Ledger""");
+        do {
+            print("enter Valid command here -> ",false);
+            enteredCommand=scanner.nextLine().toLowerCase().trim();
+            switch (enteredCommand){
+                case "1" -> monthToDate();
+                case "2" -> previousMonth();
+                case "3" -> yearToDate();
+                case "4" -> PreviousYear();
+                case "5" -> searchByVendor();
+                default -> {
+                    if (!enteredCommand.equals("x")) {
+                        enteredCommand="";
+                        print("Error! Invalid command found. Please enter a Valid command");
+                    } else {runLedgerMenu();}
+                }
+            }
+        } while (enteredCommand.isEmpty());
+
     }
 
     private static void makePayment() {
@@ -218,7 +250,27 @@ public class Main {
         runLedgerMenu();
     }
 
-    private static void monthToDate() {}
+    private static void monthToDate() {
+        print("""
+                == Mouth Key ==
+                 Jan 1 | Feb 2
+                 Mar 3 | Apr 4
+                 May 5 | Jun 6
+                 Jul 7 | Aug 8
+                 Sep 9 | Oct 10
+                Nov 11 | Dec 12""");
+        LocalDateTime today = LocalDateTime.now();
+        String[] currentDateList = today.format(formatYear).split("-");
+        int currentMouth = Integer.parseInt(currentDateList[1]);
+        int enterDate=stringToInteger("please enter date search mouth here -> ");
+        for (Transaction transaction: transactionList) {
+            String[] dateList = transaction.date.split("-");
+            int dateOfMouth = Integer.parseInt(dateList[1]);
+            if (dateOfMouth >= enterDate || dateOfMouth <= currentMouth) {
+                print(transaction.toRow());
+            }
+        }
+    }
 
     private static void previousMonth() {}
 
@@ -229,6 +281,17 @@ public class Main {
             print(prompt,false);
             try {
                 return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                print("Error invalid command! Please enter a valid command");
+                stringToDouble(prompt);
+            }
+        }
+    }
+    public static int stringToInteger(String prompt) {
+        while (true) {
+            print(prompt,false);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 print("Error invalid command! Please enter a valid command");
                 stringToDouble(prompt);
