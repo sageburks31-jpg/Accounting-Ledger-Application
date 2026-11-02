@@ -222,6 +222,7 @@ public class Main {
     private static void returnToMain() {
         print("press ENTER to return to main", false);
         scanner.nextLine();
+        scanner.close();
     }
 
     private static void displayAllDeposits() {
@@ -252,7 +253,7 @@ public class Main {
 
     private static void monthToDate() {
         print("""
-                == Mouth Key ==
+                == key of mouths ==
                  Jan 1 | Feb 2
                  Mar 3 | Apr 4
                  May 5 | Jun 6
@@ -261,15 +262,21 @@ public class Main {
                 Nov 11 | Dec 12""");
         LocalDateTime today = LocalDateTime.now();
         String[] currentDateList = today.format(formatYear).split("-");
-        int currentMouth = Integer.parseInt(currentDateList[1]);
+        int thisYear = Integer.parseInt(currentDateList[0]);
+        int thisMouth = Integer.parseInt(currentDateList[1]);
         int enterDate=stringToInteger("please enter date search mouth here -> ");
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.date.split("-");
             int dateOfMouth = Integer.parseInt(dateList[1]);
-            if (dateOfMouth >= enterDate || dateOfMouth <= currentMouth) {
-                print(transaction.toRow());
+            int dateOfYear = Integer.parseInt(dateList[0]);
+            if (dateOfYear == thisYear) {
+                if (dateOfMouth >= enterDate || dateOfMouth <= thisMouth) {
+                    print(transaction.toRow());
+                }
             }
         }
+        returnToMain();
+        runReportsMenu();
     }
 
     private static void previousMonth() {}
