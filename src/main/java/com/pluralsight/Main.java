@@ -27,7 +27,7 @@ public class Main {
             String input;
             while((input = bufReader.readLine()) != null) {
                 print(input);
-                if (!input.equals("testDate|testTime|testDescription|testVendor|testAmount")) {
+                if (!input.equals("date|time|description|vendor|amount")) {
                     String[] lineSegment = input.split("\\|");
                     Transaction product1 = new Transaction(lineSegment[0], lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
                     transactionList.add(product1);
@@ -41,7 +41,7 @@ public class Main {
         try {
             FileWriter fileWriter = new FileWriter(testReadWriteFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.append("testDate|testTime|testDescription|testVendor|testAmount");
+            bufferedWriter.append("date|time|description|vendor|amount");
             bufferedWriter.newLine();
             for (int i = 0; i <= transactionList.size() - 1; i++) {
                 bufferedWriter.write(transactionList.get(i).toRow());
@@ -57,7 +57,7 @@ public class Main {
     }
 
     public static void runMainMenu() {
-        String enteredCommand = "";
+        String enteredCommand;
         print("""
                 
                 === Main Account Menu ===
@@ -86,7 +86,7 @@ public class Main {
     }
 
     private static void runLedgerMenu() {
-        String enteredCommand = "";
+        String enteredCommand;
         print("""
                 
                 === Main Ledger Menu ===
@@ -111,9 +111,7 @@ public class Main {
         } while (enteredCommand.isEmpty());
     }
 
-    private static void makePayment() {}
-
-    private static void addDeposit() {
+    private static void makePayment() {
         String enteredCommand = "";
         String[] commandList = {"enter description", "enter vendor", "enter amount"};
 
@@ -128,18 +126,12 @@ public class Main {
                         enter here ->""" + " ", command), false);
                 enteredCommand = scanner.nextLine().trim();
             }
-            String cancelCommand=enteredCommand.toLowerCase();
+            String cancelCommand = enteredCommand.toLowerCase();
             if (!cancelCommand.equals("c")) {
                 switch (command) {
-                    case "enter description" -> {
-                        transaction.setDescription(enteredCommand);
-                    }
-                    case "enter vendor" -> {
-                        transaction.setVendor(enteredCommand);
-                    }
-                    case "enter amount" -> {
-                        transaction.setAmount(stringToDouble(command));
-                    }
+                    case "enter description" -> transaction.setDescription(enteredCommand);
+                    case "enter vendor" -> transaction.setVendor(enteredCommand);
+                    case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> ")*-1);
                 }
             } else {
                 depositIsComplete = false;
@@ -147,20 +139,53 @@ public class Main {
                 break;
             }
         }
+        if (depositIsComplete) extracted(transaction);
+    }
 
-        if (depositIsComplete) {
-            LocalDateTime today = LocalDateTime.now();
-            transaction.setDate(today.format(formatYear));
-            transaction.setTime(today.format(formatHours));
-            transactionList.add(transaction);
-            writeFile();
-            print("deposit was added to your transaction list");
-            print(transactionList.get(transactionList.size()-1).toRow());
-            print("press ENTER to return to main", false);
-            scanner.nextLine();
-            runMainMenu();
+    private static void addDeposit() {
+        String enteredCommand = "";
+        String[] commandList = {"enter description", "enter vendor", "enter amount"};
+
+        boolean depositIsComplete = true;
+        Transaction transaction;
+        transaction = new Transaction();
+
+        for (String command : commandList) {
+            if (!command.equals("enter amount")) {
+                print(String.format("""
+                        %s
+                        enter C to cancel and return to main menu
+                        enter here ->""" + " ", command), false);
+                enteredCommand = scanner.nextLine().trim();
+            }
+            String cancelCommand=enteredCommand.toLowerCase();
+            if (!cancelCommand.equals("c")) {
+                switch (command) {
+                    case "enter description" -> transaction.setDescription(enteredCommand);
+                    case "enter vendor" -> transaction.setVendor(enteredCommand);
+                    case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> "));
+                }
+            } else {
+                depositIsComplete = false;
+                runMainMenu();
+                break;
+            }
         }
+        if (depositIsComplete) {extracted(transaction);}
+    }
 
+    private static void extracted(Transaction transaction) {
+        LocalDateTime today = LocalDateTime.now();
+        transaction.setDate(today.format(formatYear));
+        transaction.setTime(today.format(formatHours));
+
+        transactionList.add(transaction);
+        writeFile();
+        print("deposit was added to your transaction list");
+        //print(transactionList.get(transactionList.size()-1).toRow());
+        print("press ENTER to return to main", false);
+        scanner.nextLine();
+        runMainMenu();
     }
 
     private static void displayAllDeposits() {}
