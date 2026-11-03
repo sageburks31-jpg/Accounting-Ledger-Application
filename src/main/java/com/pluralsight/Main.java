@@ -308,6 +308,7 @@ public class Main {
             try {
                 if (enteredCommand.isEmpty()) {
                     int integerOfCommand = Integer.parseInt(enteredCommand);
+                    print(String.valueOf(integerOfCommand),false);
                 }
                 String[] splitString = enteredCommand.split("");
                 StringBuilder enteredCommandBuilder = new StringBuilder();
@@ -347,5 +348,15 @@ public class Main {
         returnToMain();
     }
 
-    private static void searchByVendor() {}
+    private static void searchByVendor() {
+        print("Please enter name of vendor -> ",false);
+        String enteredCommand = scanner.nextLine().toLowerCase().trim();
+        for (int i = 0; i <= transactionList.size()-1; i++) {
+            String vendor = transactionList.get(i).getVendor().toLowerCase().trim();
+            if (vendor.equals(enteredCommand)) {
+                print(transactionList.get(i).toRow());
+            }
+        }
+        returnToMain();
+    }
 }
