@@ -9,7 +9,7 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static List<Transaction> transactionList = new ArrayList<>();
-    static String testReadWriteFile = "test-writer.csv";
+    //static String testReadWriteFile = "test-writer.csv";
     static String transactionReadWriteFile = "transactions.csv";
     static DateTimeFormatter formatYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     static DateTimeFormatter formatHours = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -22,7 +22,7 @@ public class Main {
 
     public static void readFile() {
         try {
-            FileReader fileReader = new FileReader(testReadWriteFile);
+            FileReader fileReader = new FileReader(transactionReadWriteFile);
             BufferedReader bufReader = new BufferedReader(fileReader);
             String input;
             while((input = bufReader.readLine()) != null) {
@@ -39,7 +39,7 @@ public class Main {
 
     public static void writeFile() {
         try {
-            FileWriter fileWriter = new FileWriter(testReadWriteFile);
+            FileWriter fileWriter = new FileWriter(transactionReadWriteFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             for (int i = 0; i <= transactionList.size()-1; i++) {
                 bufferedWriter.append(transactionList.get(i).toRow());
