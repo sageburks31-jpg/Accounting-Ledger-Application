@@ -254,7 +254,7 @@ public class Main {
         int enterDate=stringToInteger("please enter date search mouth here -> ");
 
         for (Transaction transaction: transactionList) {
-            String[] dateList = transaction.date.split("-");
+            String[] dateList = transaction.getDate().split("-");
             int dateOfMouth = Integer.parseInt(dateList[1]);
 
             int dateOfYear = Integer.parseInt(dateList[0]);
@@ -278,7 +278,7 @@ public class Main {
         int dateOfMouth = thisMouth-1;
         if (dateOfMouth == 0) {dateOfMouth=12;}
         for (Transaction transaction: transactionList) {
-            String[] dateList = transaction.date.split("-");
+            String[] dateList = transaction.getDate().split("-");
 
             int dateOfYear = Integer.parseInt(dateList[0]);
             if (dateOfYear == thisYear) {

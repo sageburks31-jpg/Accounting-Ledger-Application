@@ -2,11 +2,11 @@ package com.pluralsight;
 
 public class Transaction {
 
-    String date;
-    String time;
-    String description;
-    String vendor;
-    double amount;
+    private String date;
+    private String time;
+    private String description;
+    private String vendor;
+    private double amount;
 
     public Transaction() {}
     public Transaction(String date, String time, String description, String vendor, double amount) {
