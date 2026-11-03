@@ -264,12 +264,16 @@ public class Main {
         String[] currentDateList = today.format(formatYear).split("-");
 
         int thisYear = Integer.parseInt(currentDateList[0]);
-        int enterDate=stringToInteger("please enter date search Year here -> ");
+        int enterDate;
+        do {
+            enterDate = stringToInteger("please enter date search Year here -> ");
+            if (enterDate < 1000) {
+                print("Please enter a proper date.");
+            }
+        }while (enterDate < 1000);
 
         for (Transaction transaction: transactionList) {
-            if (enterDate <= thisYear) {
-                print(transaction.toRow());
-            }
+            if (enterDate <= thisYear) {print(transaction.toRow());}
         }
         returnToMain();
     }
@@ -294,6 +298,7 @@ public class Main {
             }
         }
     }
+
     public static String stringToFormatString(String prompt) {
         while (true) {
             print(prompt,false);
@@ -343,5 +348,4 @@ public class Main {
     }
 
     private static void searchByVendor() {}
-
 }
