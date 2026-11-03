@@ -41,12 +41,9 @@ public class Main {
         try {
             FileWriter fileWriter = new FileWriter(testReadWriteFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.append("date|time|description|vendor|amount");
+            bufferedWriter.append(transactionList.get(transactionList.size()-1).toRow());
+
             bufferedWriter.newLine();
-            for (int i = 0; i <= transactionList.size() - 1; i++) {
-                bufferedWriter.write(transactionList.get(i).toRow());
-                bufferedWriter.newLine();
-            }
             bufferedWriter.close();
         } catch(IOException e) {print(String.valueOf(e));}
     }
@@ -58,44 +55,40 @@ public class Main {
 
     public static void runMainMenu() {
         String enteredCommand;
-        print("""
+        do {
+            print("""
                 
                 === Main Account Menu ===
                 (D) Add Deposit
                 (P) Make Payment
-                (L) go to Ledger
+                (L) Ledger
                 (X) Exit""");
-        do {
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
                 case "d" -> addDeposit();
                 case "p" -> makePayment();
                 case "l" -> runLedgerMenu();
-                default -> {
-                    if (!enteredCommand.equals("x")) {
-                        enteredCommand="";
-                        print("Error! Invalid command found. Please enter a Valid command");
-                    } else {
-                        print("thank you for using our service");
-                        writeFile();
-                    }
+                case "x" -> {
+                    print("thank you for using our service");
+                    writeFile();
                 }
+                default -> print("Error! Invalid command found. Please enter a Valid command");
             }
-        } while (enteredCommand.isEmpty());
+        } while (!enteredCommand.equals("x"));
     }
 
     private static void runLedgerMenu() {
         String enteredCommand;
-        print("""
+        do {
+            print("""
                 
                 === Ledger Menu ===
-                (D) to see All Deposits
-                (P) to see All Payments
-                (A) to see All Reports
-                (R) to see more Report options
-                (x) to return to main""");
-        do {
+                (A) All
+                (D) Deposits
+                (P) Payments
+                (R) Report
+                (H) Home""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
@@ -104,18 +97,19 @@ public class Main {
                 case "a" -> displayAllReports();
                 case "r" -> runReportsMenu();
                 default -> {
-                    if (!enteredCommand.equals("x")) {
+                    if (!enteredCommand.equals("h")) {
                         enteredCommand="";
                         print("Error! Invalid command found. Please enter a Valid command");
-                    } else {runMainMenu();}
+                    }
                 }
             }
-        } while (enteredCommand.isEmpty());
+        } while (!enteredCommand.equals("h"));
     }
 
     private static void runReportsMenu() {
         String enteredCommand;
-        print("""
+        do {
+            print("""
                 
                 === Reports Menu ===
                 (1) Month To Date
@@ -123,8 +117,7 @@ public class Main {
                 (3) Year To Date
                 (4) Previous Year
                 (5) Search by Vendor
-                (x) to return to Ledger""");
-        do {
+                (0) back""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
@@ -134,14 +127,13 @@ public class Main {
                 case "4" -> PreviousYear();
                 case "5" -> searchByVendor();
                 default -> {
-                    if (!enteredCommand.equals("x")) {
+                    if (!enteredCommand.equals("0")) {
                         enteredCommand="";
                         print("Error! Invalid command found. Please enter a Valid command");
-                    } else {runLedgerMenu();}
+                    }
                 }
             }
-        } while (enteredCommand.isEmpty());
-
+        } while (!enteredCommand.equals("0"));
     }
 
     private static void makePayment() {
@@ -169,7 +161,6 @@ public class Main {
                 }
             } else {
                 depositIsComplete = false;
-                runMainMenu();
                 break;
             }
         }
@@ -201,7 +192,6 @@ public class Main {
                 }
             } else {
                 depositIsComplete = false;
-                runMainMenu();
                 break;
             }
         }
@@ -216,7 +206,6 @@ public class Main {
         transactionList.add(transaction);
         writeFile();
         returnToMain();
-        runMainMenu();
     }
 
     private static void returnToMain() {
@@ -232,7 +221,6 @@ public class Main {
             }
         }
         returnToMain();
-        runLedgerMenu();
     }
 
     private static void displayAllPayments() {
@@ -242,13 +230,11 @@ public class Main {
             }
         }
         returnToMain();
-        runLedgerMenu();
     }
 
     private static void displayAllReports() {
         transactionList.forEach(transaction -> print(transaction.toRow()));
         returnToMain();
-        runLedgerMenu();
     }
 
     private static void monthToDate() {
@@ -279,7 +265,6 @@ public class Main {
             }
         }
         returnToMain();
-        runReportsMenu();
     }
 
     private static void previousMonth() {
@@ -302,7 +287,6 @@ public class Main {
         }
         print("current month" + mouthNames[thisMouth-1] + " " + thisMouth);
         returnToMain();
-        runReportsMenu();
     }
 
     private static void yearToDate() {}
@@ -330,7 +314,20 @@ public class Main {
         }
     }
 
-    private static void PreviousYear() {}
+    private static void PreviousYear() {
+        LocalDateTime today = LocalDateTime.now();
+        String[] currentDateList = today.format(formatYear).split("-");
+
+        int thisYear = Integer.parseInt(currentDateList[0]);
+        int enterDate=stringToInteger("please enter date search Year here -> ");
+
+        for (Transaction transaction: transactionList) {
+            if (enterDate <= thisYear) {
+                print(transaction.toRow());
+            }
+        }
+        returnToMain();
+    }
 
     private static void searchByVendor() {}
 
