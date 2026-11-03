@@ -41,9 +41,10 @@ public class Main {
         try {
             FileWriter fileWriter = new FileWriter(testReadWriteFile);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.append(transactionList.get(transactionList.size()-1).toRow());
-
-            bufferedWriter.newLine();
+            for (int i = 0; i <= transactionList.size()-1; i++) {
+                bufferedWriter.append(transactionList.get(i).toRow());
+                bufferedWriter.newLine();
+            }
             bufferedWriter.close();
         } catch(IOException e) {print(String.valueOf(e));}
     }
@@ -258,7 +259,20 @@ public class Main {
         returnToMain();
     }
 
-    private static void yearToDate() {}
+    private static void yearToDate() {
+        LocalDateTime today = LocalDateTime.now();
+        String[] currentDateList = today.format(formatYear).split("-");
+
+        int thisYear = Integer.parseInt(currentDateList[0]);
+        int enterDate=stringToInteger("please enter date search Year here -> ");
+
+        for (Transaction transaction: transactionList) {
+            if (enterDate <= thisYear) {
+                print(transaction.toRow());
+            }
+        }
+        returnToMain();
+    }
 
     public static double stringToDouble(String prompt) {
         while (true) {
@@ -284,20 +298,22 @@ public class Main {
         while (true) {
             print(prompt,false);
             boolean hasPipe = false;
+
             String enteredCommand=scanner.nextLine().trim();
             try {
                 if (enteredCommand.isEmpty()) {
                     int integerOfCommand = Integer.parseInt(enteredCommand);
                 }
                 String[] splitString = enteredCommand.split("");
-                enteredCommand = "";
+                StringBuilder enteredCommandBuilder = new StringBuilder();
                 for (String character : splitString) {
                     if (character.equals("|")) {
                             character = "/";
                             hasPipe = true;
                     }
-                        enteredCommand += character;
+                        enteredCommandBuilder.append(character);
                 }
+                enteredCommand = enteredCommandBuilder.toString();
                 if (hasPipe) {
                         print("character(s) found to be in conflict with .csv format. '|' is overwritten with '/'");
                 }
@@ -313,13 +329,16 @@ public class Main {
         String[] currentDateList = today.format(formatYear).split("-");
 
         int thisYear = Integer.parseInt(currentDateList[0]);
-        int enterDate=stringToInteger("please enter date search Year here -> ");
+        int lastYear = thisYear - 1;
 
         for (Transaction transaction: transactionList) {
-            if (enterDate <= thisYear) {
+            String[] transactionDate = transaction.getDate().split("-");
+            int transactionYear = Integer.parseInt(transactionDate[0]);
+            if (lastYear == transactionYear) {
                 print(transaction.toRow());
             }
         }
+        print("\n",true);
         returnToMain();
     }
 
