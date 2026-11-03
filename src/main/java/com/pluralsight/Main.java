@@ -51,6 +51,7 @@ public class Main {
     public static void main(String[] args) {
         readFile();
         runMainMenu();
+        scanner.close();
     }
 
     public static void runMainMenu() {
@@ -137,65 +138,34 @@ public class Main {
     }
 
     private static void makePayment() {
-        String enteredCommand = "";
         String[] commandList = {"enter description", "enter vendor", "enter amount"};
-
-        boolean depositIsComplete = true;
         Transaction transaction;
         transaction = new Transaction();
 
         for (String command : commandList) {
-            if (!command.equals("enter amount")) {
-                print(String.format("""
-                        %s
-                        enter C to cancel and return to main menu
-                        enter here ->""" + " ", command), false);
-                enteredCommand = scanner.nextLine().trim();
-            }
-            String cancelCommand = enteredCommand.toLowerCase();
-            if (!cancelCommand.equals("c")) {
-                switch (command) {
-                    case "enter description" -> transaction.setDescription(enteredCommand);
-                    case "enter vendor" -> transaction.setVendor(enteredCommand);
-                    case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> ")*-1);
-                }
-            } else {
-                depositIsComplete = false;
-                break;
+            switch (command) {
+                case "enter description" -> transaction.setDescription(stringToFormatString(command + "-> "));
+                case "enter vendor" -> transaction.setVendor(stringToFormatString(command + "-> "));
+                case "enter amount" -> transaction.setAmount(stringToDouble(command + "-> ") * -1);
             }
         }
-        if (depositIsComplete) extracted(transaction);
+        extracted(transaction);
     }
 
     private static void addDeposit() {
-        String enteredCommand = "";
         String[] commandList = {"enter description", "enter vendor", "enter amount"};
-
-        boolean depositIsComplete = true;
         Transaction transaction;
         transaction = new Transaction();
 
         for (String command : commandList) {
-            if (!command.equals("enter amount")) {
-                print(String.format("""
-                        %s
-                        enter C to cancel and return to main menu
-                        enter here ->""" + " ", command), false);
-                enteredCommand = scanner.nextLine().trim();
-            }
-            String cancelCommand=enteredCommand.toLowerCase();
-            if (!cancelCommand.equals("c")) {
-                switch (command) {
-                    case "enter description" -> transaction.setDescription(enteredCommand);
-                    case "enter vendor" -> transaction.setVendor(enteredCommand);
-                    case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> "));
-                }
-            } else {
-                depositIsComplete = false;
-                break;
+            print(command);
+            switch (command) {
+                case "enter description" -> transaction.setDescription(stringToFormatString(command+"-> "));
+                case "enter vendor" -> transaction.setVendor(stringToFormatString(command+"-> "));
+                case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> "));
             }
         }
-        if (depositIsComplete) {extracted(transaction);}
+        extracted(transaction);
     }
 
     private static void extracted(Transaction transaction) {
@@ -211,7 +181,6 @@ public class Main {
     private static void returnToMain() {
         print("press ENTER to return to main", false);
         scanner.nextLine();
-        scanner.close();
     }
 
     private static void displayAllDeposits() {
@@ -298,7 +267,6 @@ public class Main {
                 return Double.parseDouble(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 print("Error invalid command! Please enter a valid command");
-                stringToDouble(prompt);
             }
         }
     }
@@ -309,7 +277,33 @@ public class Main {
                 return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 print("Error invalid command! Please enter a valid command");
-                stringToDouble(prompt);
+            }
+        }
+    }
+    public static String stringToFormatString(String prompt) {
+        while (true) {
+            print(prompt,false);
+            boolean hasPipe = false;
+            String enteredCommand=scanner.nextLine().trim();
+            try {
+                if (enteredCommand.isEmpty()) {
+                    int integerOfCommand = Integer.parseInt(enteredCommand);
+                }
+                String[] splitString = enteredCommand.split("");
+                enteredCommand = "";
+                for (String character : splitString) {
+                    if (character.equals("|")) {
+                            character = "/";
+                            hasPipe = true;
+                    }
+                        enteredCommand += character;
+                }
+                if (hasPipe) {
+                        print("character(s) found to be in conflict with .csv format. '|' is overwritten with '/'");
+                }
+                return enteredCommand;
+            } catch (NumberFormatException e) {
+                print("Error invalid command! Please enter a valid command");
             }
         }
     }
