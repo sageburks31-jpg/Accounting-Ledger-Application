@@ -123,11 +123,11 @@ public class Main {
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
-                case "1" -> monthToDate();
-                case "2" -> previousMonth();
-                case "3" -> yearToDate();
-                case "4" -> PreviousYear();
-                case "5" -> searchByVendor();
+                case "1" -> displayMonthToDate();
+                case "2" -> displayItemsFromPreviousMonth();
+                case "3" -> displayYearToDate();
+                case "4" -> displayItemsFromPreviousYear();
+                case "5" -> displayVendorNamedItems();
                 default -> {
                     if (!enteredCommand.equals("0")) {
                         enteredCommand="";
@@ -150,7 +150,7 @@ public class Main {
                 case "enter amount" -> transaction.setAmount(stringToDouble(command + "-> ") * -1);
             }
         }
-        extracted(transaction);
+        addToTransactionList(transaction);
     }
 
     private static void addDeposit() {
@@ -166,10 +166,10 @@ public class Main {
                 case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> "));
             }
         }
-        extracted(transaction);
+        addToTransactionList(transaction);
     }
 
-    private static void extracted(Transaction transaction) {
+    private static void addToTransactionList(Transaction transaction) {
         LocalDateTime today = LocalDateTime.now();
         transaction.setDate(today.format(formatYear));
         transaction.setTime(today.format(formatHours));
@@ -207,7 +207,7 @@ public class Main {
         returnToMain();
     }
 
-    private static void monthToDate() {
+    private static void displayMonthToDate() {
         print("""
                 == key of mouths ==
                  Jan 1 | Feb 2
@@ -237,7 +237,7 @@ public class Main {
         returnToMain();
     }
 
-    private static void previousMonth() {
+    private static void displayItemsFromPreviousMonth() {
         String[] mouthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         LocalDateTime today = LocalDateTime.now();
 
@@ -259,7 +259,7 @@ public class Main {
         returnToMain();
     }
 
-    private static void yearToDate() {
+    private static void displayYearToDate() {
         LocalDateTime today = LocalDateTime.now();
         String[] currentDateList = today.format(formatYear).split("-");
 
@@ -330,7 +330,7 @@ public class Main {
         }
     }
 
-    private static void PreviousYear() {
+    private static void displayItemsFromPreviousYear() {
         LocalDateTime today = LocalDateTime.now();
         String[] currentDateList = today.format(formatYear).split("-");
 
@@ -348,7 +348,7 @@ public class Main {
         returnToMain();
     }
 
-    private static void searchByVendor() {
+    private static void displayVendorNamedItems() {
         print("Please enter name of vendor -> ",false);
         String enteredCommand = scanner.nextLine().toLowerCase().trim();
         for (int i = 0; i <= transactionList.size()-1; i++) {
