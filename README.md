@@ -1,12 +1,18 @@
 # Account Ledger
 
-## How to use
+## How to use/download
 - --
-### Downloads
+### Download and setup
 1. download the Zip file in [Account Ledger](https://github.com/sageburks31-jpg/Accounting-Ledger-Application) from GitHub
 2. download and open IntelliJ(if you don't have IntelliJ already nor have any other Java coding application)
+3. 
 - --
-## Interesting Code
+### Use
+1. 
+2. 
+3. 
+- --
+## Interesting code
 - --
 *found in lines 302-331 of Main.java*
 ```java 
@@ -41,15 +47,17 @@ public static String stringToFormatString(String prompt) {
     }
 }
 ```
-#### Explanation of Code above does- 
+#### Explanation of the Code shown above- 
 
-- 
-- 
-- 
+- v 
+- v
+- v
 - --
 ## Screenshots
 - --
-#### Shows how the console is run and used-
+#### Shows how the console looks when ran-
 <img height="547" src="/Users/treeman/Documents/intel_files/Accounting-Ledger-Application/Screenshot 2026-11-04 at 9.13.49 AM.png" width="452" alt=""/>
+Context:
+*this screenshot shows the main-menu being used to go to the Ledger-Menu. And the ledger-Menu being used to go to the Reports-Menu, with the Report Menu showing a "Error Invalid Command" response*
 
 - --
