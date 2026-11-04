@@ -4,7 +4,7 @@
 - --
 ### Downloads
 1. download the Zip file in [Account Ledger](https://github.com/sageburks31-jpg/Accounting-Ledger-Application) from GitHub
-2. download and open Intellij(if you don't have Intellij already nor have any other Java coding application)
+2. download and open IntelliJ(if you don't have IntelliJ already nor have any other Java coding application)
 - --
 ## Interesting Code
 - --
@@ -50,6 +50,6 @@ public static String stringToFormatString(String prompt) {
 ## Screenshots
 - --
 #### Shows how the console is run and used-
-<img height="547" src="/Users/treeman/Documents/intel_files/Accounting-Ledger-Application/Screenshot 2026-11-04 at 9.13.49 AM.png" width="452"/>
+<img height="547" src="/Users/treeman/Documents/intel_files/Accounting-Ledger-Application/Screenshot 2026-11-04 at 9.13.49 AM.png" width="452" alt=""/>
 
 - --
