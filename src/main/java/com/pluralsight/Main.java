@@ -9,46 +9,47 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static List<Transaction> transactionList = new ArrayList<>();
-    //static String testReadWriteFile = "test-writer.csv";
+    static String testReadWriteFile = "test-writer.csv";
     static String transactionReadWriteFile = "transactions.csv";
     static DateTimeFormatter formatYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     static DateTimeFormatter formatHours = DateTimeFormatter.ofPattern("HH:mm:ss");
 
+    // helper print methods
     private static void print(String text) {System.out.println(text);}
     private static void print(String text, boolean pushNextLine) {
         if (pushNextLine) {System.out.println(text);}
         else {System.out.print(text);}
     }
 
+    // read/write File methods
     public static void readFile() {
         try {
-            FileReader fileReader = new FileReader(transactionReadWriteFile);
+            FileReader fileReader = new FileReader(testReadWriteFile);
             BufferedReader bufReader = new BufferedReader(fileReader);
             String input;
             while((input = bufReader.readLine()) != null) {
-                print(input);
+                // print(input);
                 if (!input.equals("date|time|description|vendor|amount")) {
                     String[] lineSegment = input.split("\\|");
-                    Transaction product1 = new Transaction(lineSegment[0], lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
+                    LocalDate localDate = LocalDate.parse(lineSegment[0]);
+                    Transaction product1 = new Transaction(localDate, lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
                     transactionList.add(product1);
                 }
             }
             bufReader.close();
         } catch(IOException e) {print(String.valueOf(e));}
     }
-
     public static void writeFile() {
         try {
-            FileWriter fileWriter = new FileWriter(transactionReadWriteFile);
+            FileWriter fileWriter = new FileWriter(testReadWriteFile, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            for (int i = 0; i <= transactionList.size()-1; i++) {
-                bufferedWriter.append(transactionList.get(i).toRow());
-                bufferedWriter.newLine();
-            }
+            bufferedWriter.append(transactionList.get(transactionList.size()-1).toRow());
+            bufferedWriter.newLine();
             bufferedWriter.close();
         } catch(IOException e) {print(String.valueOf(e));}
     }
 
+    // main/runMenu methods
     public static void main(String[] args) {
         readFile();
         runMainMenu();
@@ -71,15 +72,11 @@ public class Main {
                 case "d" -> addDeposit();
                 case "p" -> makePayment();
                 case "l" -> runLedgerMenu();
-                case "x" -> {
-                    print("thank you for using our service");
-                    writeFile();
-                }
+                case "x" -> print("thank you for using our service");
                 default -> print("Error! Invalid command found. Please enter a Valid command");
             }
         } while (!enteredCommand.equals("x"));
     }
-
     private static void runLedgerMenu() {
         String enteredCommand;
         do {
@@ -107,7 +104,6 @@ public class Main {
             }
         } while (!enteredCommand.equals("h"));
     }
-
     private static void runReportsMenu() {
         String enteredCommand;
         do {
@@ -138,6 +134,7 @@ public class Main {
         } while (!enteredCommand.equals("0"));
     }
 
+    // Payment/Deposit methods
     private static void makePayment() {
         String[] commandList = {"enter description", "enter vendor", "enter amount"};
         Transaction transaction;
@@ -152,7 +149,6 @@ public class Main {
         }
         addToTransactionList(transaction);
     }
-
     private static void addDeposit() {
         String[] commandList = {"enter description", "enter vendor", "enter amount"};
         Transaction transaction;
@@ -169,21 +165,6 @@ public class Main {
         addToTransactionList(transaction);
     }
 
-    private static void addToTransactionList(Transaction transaction) {
-        LocalDateTime today = LocalDateTime.now();
-        transaction.setDate(today.format(formatYear));
-        transaction.setTime(today.format(formatHours));
-
-        transactionList.add(transaction);
-        writeFile();
-        returnToMain();
-    }
-
-    private static void returnToMain() {
-        print("press ENTER to return to main", false);
-        scanner.nextLine();
-    }
-
     private static void displayAllDeposits() {
         for (Transaction transaction: transactionList) {
             if (transaction.getAmount()>0) {
@@ -192,7 +173,6 @@ public class Main {
         }
         returnToMain();
     }
-
     private static void displayAllPayments() {
         for (Transaction transaction: transactionList) {
             if (transaction.getAmount()<0) {
@@ -202,11 +182,7 @@ public class Main {
         returnToMain();
     }
 
-    private static void displayAllReports() {
-        transactionList.forEach(transaction -> print(transaction.toRow()));
-        returnToMain();
-    }
-
+    // display date methods
     private static void displayMonthToDate() {
         print("""
                 == key of mouths ==
@@ -221,22 +197,23 @@ public class Main {
 
         int thisYear = Integer.parseInt(currentDateList[0]);
         int thisMouth = Integer.parseInt(currentDateList[1]);
-        int enterDate=stringToInteger("please enter date search mouth here -> ");
+        int enterDate=stringToInteger("please enter date of month here -> ");
+
+        boolean itemsInYear = false;
 
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.getDate().split("-");
-            int dateOfMouth = Integer.parseInt(dateList[1]);
+            int transactionMouth = Integer.parseInt(dateList[1]);
+            int transactionYear = Integer.parseInt(dateList[0]);
 
-            int dateOfYear = Integer.parseInt(dateList[0]);
-            if (dateOfYear == thisYear) {
-                if (dateOfMouth >= enterDate || dateOfMouth <= thisMouth) {
-                    print(transaction.toRow());
-                }
+            if (transactionYear == thisYear) {
+                if (transactionMouth == enterDate) {itemsInYear = isItemsInYear(transaction);}
+                else if (enterDate < thisMouth) {itemsInYear = isItemsInYear(transaction);}
             }
         }
+        if (!itemsInYear) {print("No transactions found.");}
         returnToMain();
     }
-
     private static void displayItemsFromPreviousMonth() {
         String[] mouthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         LocalDateTime today = LocalDateTime.now();
@@ -245,16 +222,20 @@ public class Main {
         int thisYear = Integer.parseInt(currentDateList[0]);
         int thisMouth = Integer.parseInt(currentDateList[1]);
 
-        int dateOfMouth = thisMouth-1;
-        if (dateOfMouth == 0) {dateOfMouth=12;}
+        boolean itemsInYear = false;
+        int lastMouth = thisMouth-1;
+        if (lastMouth == 0) {lastMouth = 12;}
+
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.getDate().split("-");
+            int transactionYear = Integer.parseInt(dateList[0]);
+            int transactionMonth = Integer.parseInt(dateList[1]);
 
-            int dateOfYear = Integer.parseInt(dateList[0]);
-            if (dateOfYear == thisYear) {
-                if (!(dateOfMouth > thisMouth)) print(transaction.toRow());
+            if (transactionYear == thisYear) {
+                if ((lastMouth == transactionMonth)) {itemsInYear = isItemsInYear(transaction);}
             }
         }
+        if (!itemsInYear) {print("No transactions found.");}
         print("current month" + mouthNames[thisMouth-1] + " " + thisMouth);
         returnToMain();
     }
@@ -265,30 +246,59 @@ public class Main {
 
         int thisYear = Integer.parseInt(currentDateList[0]);
         int enterDate;
+        boolean itemsInYear = false;
+
         do {
-            enterDate = stringToInteger("please enter date search Year here -> ");
-            if (enterDate < 1000) {
-                print("Please enter a proper date.");
-            }
+            enterDate = stringToInteger("please enter date of Year here -> ");
+            if (enterDate < 1000) {print("Please enter a proper date.");}
         }while (enterDate < 1000);
 
         for (Transaction transaction: transactionList) {
-            if (enterDate <= thisYear) {print(transaction.toRow());}
+            String[] transactionDate = transaction.getDate().split("-");
+            int transactionYear = Integer.parseInt(transactionDate[0]);
+
+            if (enterDate == transactionYear) {itemsInYear = isItemsInYear(transaction);}
+            else if (enterDate < thisYear) {itemsInYear = isItemsInYear(transaction);}
         }
+        if (!itemsInYear) {print("No transactions found.");}
+        returnToMain();
+    }
+    private static void displayItemsFromPreviousYear() {
+        LocalDateTime today = LocalDateTime.now();
+        String[] currentDateList = today.format(formatYear).split("-");
+
+        boolean itemsInYear=false;
+        int thisYear = Integer.parseInt(currentDateList[0]);
+        int lastYear = thisYear - 1;
+
+        for (Transaction transaction: transactionList) {
+            String[] transactionDate = transaction.getDate().split("-");
+            int transactionYear = Integer.parseInt(transactionDate[0]);
+            if (lastYear == transactionYear) {itemsInYear = isItemsInYear(transaction);}
+        }
+        if (!itemsInYear) {print("No transactions found.");}
+        print("\n",true);
         returnToMain();
     }
 
-    public static double stringToDouble(String prompt) {
+    // helper methods
+    private static double stringToDouble(String prompt) {
         while (true) {
             print(prompt,false);
+            String stringOfAmount = scanner.nextLine().trim();
             try {
-                return Double.parseDouble(scanner.nextLine().trim());
+                double amount = doubleToPositive(Double.parseDouble(stringOfAmount));
+                if (amount == 0) {
+                    int integerOfCommand = Integer.parseInt(stringOfAmount);
+                    print(String.valueOf(integerOfCommand),false);
+                }
+                return amount;
             } catch (NumberFormatException e) {
                 print("Error invalid command! Please enter a valid command");
             }
         }
     }
-    public static int stringToInteger(String prompt) {
+    private static int stringToInteger(String prompt) {
         while (true) {
             print(prompt,false);
             try {
@@ -298,7 +308,7 @@ public class Main {
             }
         }
     }
-    public static String stringToFormatString(String prompt) {
+    private static String stringToFormatString(String prompt) {
         while (true) {
             print(prompt,false);
             boolean hasPipe = false;
@@ -312,15 +322,12 @@ public class Main {
                 String[] splitString = enteredCommand.split("");
                 StringBuilder enteredCommandBuilder = new StringBuilder();
                 for (String character : splitString) {
-                    if (character.equals("|")) {
-                            character = "/";
-                            hasPipe = true;
-                    }
-                        enteredCommandBuilder.append(character);
+                    if (character.equals("|")) {character = "/"; hasPipe = true;}
+                    enteredCommandBuilder.append(character);
                 }
                 enteredCommand = enteredCommandBuilder.toString();
                 if (hasPipe) {
-                        print("character(s) found to be in conflict with .csv format. '|' is overwritten with '/'");
+                    print("character(s) found to be in conflict with .csv format. '|' is overwritten with '/'");
                 }
                 return enteredCommand;
             } catch (NumberFormatException e) {
@@ -329,33 +336,45 @@ public class Main {
         }
     }
 
-    private static void displayItemsFromPreviousYear() {
-        LocalDateTime today = LocalDateTime.now();
-        String[] currentDateList = today.format(formatYear).split("-");
-
-        int thisYear = Integer.parseInt(currentDateList[0]);
-        int lastYear = thisYear - 1;
-
-        for (Transaction transaction: transactionList) {
-            String[] transactionDate = transaction.getDate().split("-");
-            int transactionYear = Integer.parseInt(transactionDate[0]);
-            if (lastYear == transactionYear) {
-                print(transaction.toRow());
-            }
+    private static double doubleToPositive(double amount) {
+        while (true) {
+            if (amount < 0) {amount *= -1;}
+            else if (amount > 0) {return amount;}
         }
-        print("\n",true);
-        returnToMain();
+    }
+    private static boolean isItemsInYear(Transaction transaction) {
+        print(transaction.toRow()); return true;
     }
 
+    // Misc methods
+    private static void addToTransactionList(Transaction transaction) {
+        LocalTime today = LocalTime.now();
+        LocalDate localDate = LocalDate.now();
+        transaction.setDate(localDate);
+        transaction.setTime(today.format(formatHours));
+
+        transactionList.add(transaction);
+        writeFile(); returnToMain();
+    }
+    private static void returnToMain() {
+        print("press ENTER to return to main", false);
+        scanner.nextLine();
+    }
+
+    // Misc display methods
+    private static void displayAllReports() {
+        transactionList.forEach(transaction -> print(transaction.toRow()));
+        returnToMain();
+    }
     private static void displayVendorNamedItems() {
         print("Please enter name of vendor -> ",false);
         String enteredCommand = scanner.nextLine().toLowerCase().trim();
+
         for (int i = 0; i <= transactionList.size()-1; i++) {
             String vendor = transactionList.get(i).getVendor().toLowerCase().trim();
-            if (vendor.equals(enteredCommand)) {
-                print(transactionList.get(i).toRow());
-            }
+            if (vendor.equals(enteredCommand)) {print(transactionList.get(i).toRow());}
         }
         returnToMain();
     }
+
 }
