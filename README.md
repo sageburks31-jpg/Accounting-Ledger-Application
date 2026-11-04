@@ -14,26 +14,24 @@
 - --
 ## Interesting code
 - --
-*found in lines 302-331 of Main.java*
+*Location of Provided method: found in lines 315-343 of Main.java*
 ```java 
-public static String stringToFormatString(String prompt) {
+    private static String stringToFormatString(String prompt) {
     while (true) {
-        print(prompt, false);
+        print(prompt,false);
         boolean hasPipe = false;
 
-        String enteredCommand = scanner.nextLine().trim();
+        String enteredCommand=scanner.nextLine().trim();
         try {
             if (enteredCommand.isEmpty()) {
                 int integerOfCommand = Integer.parseInt(enteredCommand);
-                print(String.valueOf(integerOfCommand), false);
+                print(String.valueOf(integerOfCommand),false);
             }
             String[] splitString = enteredCommand.split("");
             StringBuilder enteredCommandBuilder = new StringBuilder();
+
             for (String character : splitString) {
-                if (character.equals("|")) {
-                    character = "/";
-                    hasPipe = true;
-                }
+                if (character.equals("|")) {character = "/"; hasPipe = true;}
                 enteredCommandBuilder.append(character);
             }
             enteredCommand = enteredCommandBuilder.toString();
@@ -45,7 +43,7 @@ public static String stringToFormatString(String prompt) {
             print("Error invalid command! Please enter a valid command");
         }
     }
-}
+} 
 ```
 #### Explanation of the Code shown above- 
 
@@ -58,6 +56,6 @@ public static String stringToFormatString(String prompt) {
 #### Shows how the console looks when ran-
 <img height="547" src="/Users/treeman/Documents/intel_files/Accounting-Ledger-Application/Screenshot 2026-11-04 at 9.13.49 AM.png" width="452" alt=""/>
 Context:
-*this screenshot shows the main-menu being used to go to the Ledger-Menu. And the ledger-Menu being used to go to the Reports-Menu, with the Report Menu showing a "Error Invalid Command" response*
+*this screenshot shows the main-menu being used to go to the Ledger-Menu. And the ledger-Menu being used to go to the Reports-Menu, with the Report Menu showing an "Error Invalid Command" response*
 
 - --

@@ -325,6 +325,7 @@ public class Main {
                 }
                 String[] splitString = enteredCommand.split("");
                 StringBuilder enteredCommandBuilder = new StringBuilder();
+
                 for (String character : splitString) {
                     if (character.equals("|")) {character = "/"; hasPipe = true;}
                     enteredCommandBuilder.append(character);
