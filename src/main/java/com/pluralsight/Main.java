@@ -9,7 +9,7 @@ public class Main {
 
     static Scanner scanner = new Scanner(System.in);
     static List<Transaction> transactionList = new ArrayList<>();
-    static String testReadWriteFile = "test-writer.csv";
+    //static String testReadWriteFile = "test-writer.csv";
     static String transactionReadWriteFile = "transactions.csv";
     static DateTimeFormatter formatYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     static DateTimeFormatter formatHours = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -24,7 +24,7 @@ public class Main {
     // read/write File methods
     public static void readFile() {
         try {
-            FileReader fileReader = new FileReader(testReadWriteFile);
+            FileReader fileReader = new FileReader(transactionReadWriteFile);
             BufferedReader bufReader = new BufferedReader(fileReader);
             String input;
             while((input = bufReader.readLine()) != null) {
@@ -41,7 +41,7 @@ public class Main {
     }
     public static void writeFile() {
         try {
-            FileWriter fileWriter = new FileWriter(testReadWriteFile, true);
+            FileWriter fileWriter = new FileWriter(transactionReadWriteFile, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.append(transactionList.get(transactionList.size()-1).toRow());
             bufferedWriter.newLine();
@@ -207,8 +207,12 @@ public class Main {
             int transactionYear = Integer.parseInt(dateList[0]);
 
             if (transactionYear == thisYear) {
-                if (transactionMouth == enterDate) {itemsInYear = isItemsInYear(transaction);}
-                else if (enterDate < thisMouth) {itemsInYear = isItemsInYear(transaction);}
+                if (enterDate <= thisMouth) {
+                    if (transactionMouth == enterDate)
+                    {itemsInYear = isItemsInYear(transaction);}
+                    else if (enterDate < transactionMouth)
+                    {itemsInYear = isItemsInYear(transaction);}
+                }
             }
         }
         if (!itemsInYear) {print("No transactions found.");}
@@ -236,7 +240,7 @@ public class Main {
             }
         }
         if (!itemsInYear) {print("No transactions found.");}
-        print("current month" + mouthNames[thisMouth-1] + " " + thisMouth);
+        print("current month is " + mouthNames[thisMouth-1] + " " + thisMouth);
         returnToMain();
     }
 
@@ -277,7 +281,7 @@ public class Main {
             if (lastYear == transactionYear) {itemsInYear = isItemsInYear(transaction);}
         }
         if (!itemsInYear) {print("No transactions found.");}
-        print("\n",true);
+        print("",true);
         returnToMain();
     }
 
@@ -357,7 +361,7 @@ public class Main {
         writeFile(); returnToMain();
     }
     private static void returnToMain() {
-        print("press ENTER to return to main", false);
+        print("\n press ENTER to return to main", false);
         scanner.nextLine();
     }
 

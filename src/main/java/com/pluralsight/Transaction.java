@@ -19,7 +19,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getDate() {return date;}
+    public String getDate() {return String.valueOf(date);}
     public void setDate(LocalDate date) {this.date = date;}
 
     public String getTime() {return time;}
