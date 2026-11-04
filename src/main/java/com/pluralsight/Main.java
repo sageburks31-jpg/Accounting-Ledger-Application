@@ -298,7 +298,6 @@ public class Main {
             }
         }
     }
-
     public static String stringToFormatString(String prompt) {
         while (true) {
             print(prompt,false);

@@ -4,7 +4,7 @@
 
 ### Downloads
 
-1. download the Zip file in [Account Ledger](https://github.com/sageburks31-jpg/Accounting-Ledger-Application) from Github
+1. download the Zip file in [Account Ledger](https://github.com/sageburks31-jpg/Accounting-Ledger-Application) from GitHub
 2. download and open Intellij(if you don't have Intellij already nor have any other Java programing application)
 ## Interesting Code
 
