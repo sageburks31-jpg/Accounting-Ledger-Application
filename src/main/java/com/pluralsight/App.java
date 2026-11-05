@@ -27,11 +27,13 @@ public class App {
             FileReader fileReader = new FileReader(transactionReadWriteFile);
             BufferedReader bufReader = new BufferedReader(fileReader);
             String input;
+
             while((input = bufReader.readLine()) != null) {
                 // print(input);
                 if (!input.equals("date|time|description|vendor|amount")) {
                     String[] lineSegment = input.split("\\|");
                     LocalDate localDate = LocalDate.parse(lineSegment[0]);
+
                     Transaction transaction = new Transaction(localDate, lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
                     transactionList.add(transaction);
                 }
@@ -44,6 +46,7 @@ public class App {
             FileWriter fileWriter = new FileWriter(transactionReadWriteFile, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.append(transactionList.get(transactionList.size()-1).toRow());
+
             bufferedWriter.newLine();
             bufferedWriter.close();
         } catch(IOException e) {print(String.valueOf(e));}
@@ -68,6 +71,7 @@ public class App {
                 X) Exit""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
+
             switch (enteredCommand){
                 case "d" -> addDeposit();
                 case "p" -> makePayment();
@@ -90,6 +94,7 @@ public class App {
                 H) Home""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
+
             switch (enteredCommand){
                 case "d" -> displayAllDeposits();
                 case "p" -> displayAllPayments();
@@ -118,6 +123,7 @@ public class App {
                 0) back""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
+
             switch (enteredCommand){
                 case "1" -> displayMonthToDate();
                 case "2" -> displayItemsFromPreviousMonth();
@@ -167,6 +173,7 @@ public class App {
 
     private static void displayAllDeposits() {
         boolean hasTransaction = false;
+
         for (Transaction transaction: transactionList) {
             if (transaction.getAmount()>0) {
                 hasTransaction=true;
@@ -178,6 +185,7 @@ public class App {
     }
     private static void displayAllPayments() {
         boolean hasTransaction = false;
+
         for (Transaction transaction: transactionList) {
             if (transaction.getAmount()<0) {
                 hasTransaction=true;
@@ -274,7 +282,7 @@ public class App {
             print(prompt,false);
             String stringOfAmount = scanner.nextLine().trim();
             try {
-                if (Double.parseDouble(stringOfAmount) == 0) {
+                if (Double.parseDouble(stringOfAmount) == 0 || stringOfAmount.equals("Infinity") || stringOfAmount.equals("NaN")) {
                     stringOfAmount = "invalid"; print("0 is " + stringOfAmount);
                 }
                 else {return doubleToPositive(Double.parseDouble(stringOfAmount));}
@@ -287,8 +295,8 @@ public class App {
         while (true) {
             print(prompt,false);
             boolean hasPipe = false;
-
             String enteredCommand=scanner.nextLine().trim();
+
             try {
                 if (enteredCommand.isEmpty()) {
                     int integerOfCommand = Integer.parseInt(enteredCommand);
@@ -302,6 +310,7 @@ public class App {
                     enteredCommandBuilder.append(character);
                 }
                 enteredCommand = enteredCommandBuilder.toString();
+
                 if (hasPipe) {
                     print("character(s) found to be in conflict with .csv format. '|' is overwritten with '/'");
                 }
@@ -326,11 +335,13 @@ public class App {
     private static void addToTransactionList(Transaction transaction) {
         LocalTime today = LocalTime.now();
         LocalDate localDate = LocalDate.now();
+
         transaction.setDate(localDate);
         transaction.setTime(today.format(formatHours));
-
         transactionList.add(transaction);
-        writeFile(); returnToMain();
+
+        writeFile();
+        returnToMain();
     }
     private static void returnToMain() {
         print("\n press ENTER to return to main", false);

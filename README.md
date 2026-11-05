@@ -3,8 +3,8 @@
 ## How to use/download
 - --
 ### Download and setup
-1. download the Zip file in [Account Ledger](https://github.com/sageburks31-jpg/Accounting-Ledger-Application) from GitHub
-2. download and open IntelliJ(if you don't have IntelliJ already nor have any other Java coding application)
+1. download the Zip file in [Account Ledger](https://github.com/sageburks31-jpg/Accounting-Ledger-Application) from GitHub and unzip it
+2. download and open IntelliJ(if you don't have IntelliJ already nor have any other Java coding application/editer)
 3. 
 - --
 ### Use
