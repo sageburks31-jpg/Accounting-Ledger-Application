@@ -234,9 +234,7 @@ public class Main {
 
         boolean itemsInYear = false;
         int lastMouth = thisMouth - 1;
-        if (lastMouth == 0) {
-            thisYear -= 1;
-            lastMouth = 12;}
+        if (lastMouth == 0) {thisYear -= 1; lastMouth = 12;}
 
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.getDate().split("-");
@@ -300,8 +298,7 @@ public class Main {
             String stringOfAmount = scanner.nextLine().trim();
             try {
                 if (Integer.parseInt(stringOfAmount) == 0) {
-                    stringOfAmount = "invalid";
-                    print("0 is " + stringOfAmount);
+                    stringOfAmount = "invalid"; print("0 is " + stringOfAmount);
                 }
                 else {return doubleToPositive(Double.parseDouble(stringOfAmount));}
             } catch (NumberFormatException e) {

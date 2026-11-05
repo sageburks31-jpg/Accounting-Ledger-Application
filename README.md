@@ -14,7 +14,7 @@
 - --
 ## Interesting code
 - --
-*Location of Provided method: found in lines 315-343 of Main.java*
+*Location of Provided method: found in lines 319-346 of Main.java*
 ```java 
     private static String stringToFormatString(String prompt) {
     while (true) {
