@@ -233,8 +233,10 @@ public class Main {
         int thisMouth = Integer.parseInt(currentDateList[1]);
 
         boolean itemsInYear = false;
-        int lastMouth = thisMouth-1;
-        if (lastMouth == 0) {lastMouth = 12;}
+        int lastMouth = thisMouth - 1;
+        if (lastMouth == 0) {
+            thisYear -= 1;
+            lastMouth = 12;}
 
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.getDate().split("-");
