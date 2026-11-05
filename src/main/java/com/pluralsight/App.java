@@ -32,8 +32,8 @@ public class App {
                 if (!input.equals("date|time|description|vendor|amount")) {
                     String[] lineSegment = input.split("\\|");
                     LocalDate localDate = LocalDate.parse(lineSegment[0]);
-                    Transaction product1 = new Transaction(localDate, lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
-                    transactionList.add(product1);
+                    Transaction transaction = new Transaction(localDate, lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
+                    transactionList.add(transaction);
                 }
             }
             bufReader.close();
@@ -234,7 +234,6 @@ public class App {
         print("current month is " + monthNames[thisMonth-1] + " " + thisMonth);
         returnToMain();
     }
-
     private static void displayYearToDate() {
         LocalDateTime today = LocalDateTime.now();
         String[] currentDateList = today.format(formatYear).split("-");
