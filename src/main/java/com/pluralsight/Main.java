@@ -173,7 +173,7 @@ public class Main {
                 print(transaction.toRow());
             }
         }
-        if (hasTransaction) print("No transactions found");
+        if (!hasTransaction) print("No transactions found");
         returnToMain();
     }
     private static void displayAllPayments() {
@@ -184,27 +184,17 @@ public class Main {
                 print(transaction.toRow());
             }
         }
-        if (hasTransaction) print("No transactions found");
+        if (!hasTransaction) print("No transactions found");
         returnToMain();
     }
 
     // display date methods
     private static void displayMonthToDate() {
-        print("""
-                == key of mouths ==
-                 Jan 1 | Feb 2
-                 Mar 3 | Apr 4
-                 May 5 | Jun 6
-                 Jul 7 | Aug 8
-                 Sep 9 | Oct 10
-                Nov 11 | Dec 12""");
         LocalDateTime today = LocalDateTime.now();
         String[] currentDateList = today.format(formatYear).split("-");
 
         int thisYear = Integer.parseInt(currentDateList[0]);
         int thisMouth = Integer.parseInt(currentDateList[1]);
-        int enterDate=stringToInteger("please enter date of month here -> ");
-
         boolean itemsInYear = false;
 
         for (Transaction transaction: transactionList) {
@@ -213,12 +203,7 @@ public class Main {
             int transactionYear = Integer.parseInt(dateList[0]);
 
             if (transactionYear == thisYear) {
-                if (enterDate <= thisMouth) {
-                    if (transactionMouth == enterDate)
-                    {itemsInYear = isItemsInYear(transaction);}
-                    else if (enterDate < transactionMouth)
-                    {itemsInYear = isItemsInYear(transaction);}
-                }
+                if (transactionMouth == thisMouth) {itemsInYear = isItemsInYear(transaction);}
             }
         }
         if (!itemsInYear) {print("No transactions found.");}
@@ -255,20 +240,13 @@ public class Main {
         String[] currentDateList = today.format(formatYear).split("-");
 
         int thisYear = Integer.parseInt(currentDateList[0]);
-        int enterDate;
         boolean itemsInYear = false;
-
-        do {
-            enterDate = stringToInteger("please enter date of Year here -> ");
-            if (enterDate < 1000) {print("Please enter a proper date.");}
-        }while (enterDate < 1000);
 
         for (Transaction transaction: transactionList) {
             String[] transactionDate = transaction.getDate().split("-");
             int transactionYear = Integer.parseInt(transactionDate[0]);
 
-            if (enterDate == transactionYear) {itemsInYear = isItemsInYear(transaction);}
-            else if (enterDate < thisYear) {itemsInYear = isItemsInYear(transaction);}
+            if (thisYear == transactionYear) {itemsInYear = isItemsInYear(transaction);}
         }
         if (!itemsInYear) {print("No transactions found.");}
         returnToMain();
@@ -297,20 +275,10 @@ public class Main {
             print(prompt,false);
             String stringOfAmount = scanner.nextLine().trim();
             try {
-                if (Integer.parseInt(stringOfAmount) == 0) {
+                if (Double.parseDouble(stringOfAmount) == 0) {
                     stringOfAmount = "invalid"; print("0 is " + stringOfAmount);
                 }
                 else {return doubleToPositive(Double.parseDouble(stringOfAmount));}
-            } catch (NumberFormatException e) {
-                print("Error invalid command! Please enter a valid command");
-            }
-        }
-    }
-    private static int stringToInteger(String prompt) {
-        while (true) {
-            print(prompt,false);
-            try {
-                return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 print("Error invalid command! Please enter a valid command");
             }
