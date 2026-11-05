@@ -62,10 +62,10 @@ public class Main {
             print("""
                 
                 === Main Account Menu ===
-                (D) Add Deposit
-                (P) Make Payment
-                (L) Ledger
-                (X) Exit""");
+                D) Add Deposit
+                P) Make Payment
+                L) Ledger
+                X) Exit""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
@@ -83,11 +83,11 @@ public class Main {
             print("""
                 
                 === Ledger Menu ===
-                (A) All
-                (D) Deposits
-                (P) Payments
-                (R) Report
-                (H) Home""");
+                A) All
+                D) Deposits
+                P) Payments
+                R) Report
+                H) Home""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
@@ -110,12 +110,12 @@ public class Main {
             print("""
                 
                 === Reports Menu ===
-                (1) Month To Date
-                (2) Previous Month
-                (3) Year To Date
-                (4) Previous Year
-                (5) Search by Vendor
-                (0) back""");
+                1) Month To Date
+                2) Previous Month
+                3) Year To Date
+                4) Previous Year
+                5) Search by Vendor
+                0) back""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
             switch (enteredCommand){
@@ -166,19 +166,25 @@ public class Main {
     }
 
     private static void displayAllDeposits() {
+        boolean hasTransaction = false;
         for (Transaction transaction: transactionList) {
             if (transaction.getAmount()>0) {
+                hasTransaction=true;
                 print(transaction.toRow());
             }
         }
+        if (hasTransaction) print("No transactions found");
         returnToMain();
     }
     private static void displayAllPayments() {
+        boolean hasTransaction = false;
         for (Transaction transaction: transactionList) {
             if (transaction.getAmount()<0) {
+                hasTransaction=true;
                 print(transaction.toRow());
             }
         }
+        if (hasTransaction) print("No transactions found");
         returnToMain();
     }
 
@@ -291,12 +297,11 @@ public class Main {
             print(prompt,false);
             String stringOfAmount = scanner.nextLine().trim();
             try {
-                double amount = doubleToPositive(Double.parseDouble(stringOfAmount));
-                if (amount == 0) {
-                    int integerOfCommand = Integer.parseInt(stringOfAmount);
-                    print(String.valueOf(integerOfCommand),false);
+                if (Integer.parseInt(stringOfAmount) == 0) {
+                    stringOfAmount = "invalid";
+                    print("0 is " + stringOfAmount);
                 }
-                return amount;
+                else {return doubleToPositive(Double.parseDouble(stringOfAmount));}
             } catch (NumberFormatException e) {
                 print("Error invalid command! Please enter a valid command");
             }
