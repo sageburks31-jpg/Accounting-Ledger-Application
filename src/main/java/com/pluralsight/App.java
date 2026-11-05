@@ -5,7 +5,7 @@ import java.time.*;
 import java.time.format.*;
 import java.io.*;
 
-public class Main {
+public class App {
 
     static Scanner scanner = new Scanner(System.in);
     static List<Transaction> transactionList = new ArrayList<>();
@@ -142,9 +142,9 @@ public class Main {
 
         for (String command : commandList) {
             switch (command) {
-                case "enter description" -> transaction.setDescription(stringToFormatString(command + "-> "));
-                case "enter vendor" -> transaction.setVendor(stringToFormatString(command + "-> "));
-                case "enter amount" -> transaction.setAmount(stringToDouble(command + "-> ") * -1);
+                case "enter description" -> transaction.setDescription(promptToString(command + "-> "));
+                case "enter vendor" -> transaction.setVendor(promptToString(command + "-> "));
+                case "enter amount" -> transaction.setAmount(promptToDouble(command + "-> ") * -1);
             }
         }
         addToTransactionList(transaction);
@@ -157,9 +157,9 @@ public class Main {
         for (String command : commandList) {
             print(command);
             switch (command) {
-                case "enter description" -> transaction.setDescription(stringToFormatString(command+"-> "));
-                case "enter vendor" -> transaction.setVendor(stringToFormatString(command+"-> "));
-                case "enter amount" -> transaction.setAmount(stringToDouble(command+"-> "));
+                case "enter description" -> transaction.setDescription(promptToString(command+"-> "));
+                case "enter vendor" -> transaction.setVendor(promptToString(command+"-> "));
+                case "enter amount" -> transaction.setAmount(promptToDouble(command+"-> "));
             }
         }
         addToTransactionList(transaction);
@@ -210,16 +210,16 @@ public class Main {
         returnToMain();
     }
     private static void displayItemsFromPreviousMonth() {
-        String[] mouthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         LocalDateTime today = LocalDateTime.now();
 
         String[] currentDateList = today.format(formatYear).split("-");
         int thisYear = Integer.parseInt(currentDateList[0]);
-        int thisMouth = Integer.parseInt(currentDateList[1]);
+        int thisMonth = Integer.parseInt(currentDateList[1]);
 
         boolean itemsInYear = false;
-        int lastMouth = thisMouth - 1;
-        if (lastMouth == 0) {thisYear -= 1; lastMouth = 12;}
+        int lastMonth = thisMonth - 1;
+        if (lastMonth == 0) {thisYear -= 1; lastMonth = 12;}
 
         for (Transaction transaction: transactionList) {
             String[] dateList = transaction.getDate().split("-");
@@ -227,11 +227,11 @@ public class Main {
             int transactionMonth = Integer.parseInt(dateList[1]);
 
             if (transactionYear == thisYear) {
-                if ((lastMouth == transactionMonth)) {itemsInYear = isItemsInYear(transaction);}
+                if ((lastMonth == transactionMonth)) {itemsInYear = isItemsInYear(transaction);}
             }
         }
         if (!itemsInYear) {print("No transactions found.");}
-        print("current month is " + mouthNames[thisMouth-1] + " " + thisMouth);
+        print("current month is " + monthNames[thisMonth-1] + " " + thisMonth);
         returnToMain();
     }
 
@@ -270,7 +270,7 @@ public class Main {
     }
 
     // helper methods
-    private static double stringToDouble(String prompt) {
+    private static double promptToDouble(String prompt) {
         while (true) {
             print(prompt,false);
             String stringOfAmount = scanner.nextLine().trim();
@@ -284,7 +284,7 @@ public class Main {
             }
         }
     }
-    private static String stringToFormatString(String prompt) {
+    private static String promptToString(String prompt) {
         while (true) {
             print(prompt,false);
             boolean hasPipe = false;
