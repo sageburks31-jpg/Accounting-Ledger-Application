@@ -282,7 +282,7 @@ public class App {
             print(prompt,false);
             String stringOfAmount = scanner.nextLine().trim();
             try {
-                if (Double.parseDouble(stringOfAmount) == 0 || stringOfAmount.equals("Infinity") || stringOfAmount.equals("NaN")) {
+                if (stringOfAmount.equals("0") || stringOfAmount.equals("Infinity") || stringOfAmount.equals("NaN")) {
                     stringOfAmount = "invalid"; print("0 is " + stringOfAmount);
                 }
                 else {return doubleToPositive(Double.parseDouble(stringOfAmount));}
