@@ -10,7 +10,7 @@
 5. go back to under `Project` go to `src/main/java/com/pluralsight/App.java` and double click and open `App.java`
 6. now to the row of IntelliJ next to `Current File` click the run arrow button to start the program.
 - --
-### Use
+### How to use
 1. when the program is running go and tap your curser where it says `enter Valid command here -> ` and enter one of the listed command options.
 
 - 
