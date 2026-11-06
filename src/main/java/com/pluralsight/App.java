@@ -6,13 +6,13 @@ import java.time.format.*;
 import java.io.*;
 
 public class App {
-
     static Scanner scanner = new Scanner(System.in);
     static List<Transaction> transactionList = new ArrayList<>();
     //static String testReadWriteFile = "test-writer.csv";
+
     static String transactionReadWriteFile = "transactions.csv";
     static DateTimeFormatter formatYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    static DateTimeFormatter formatHours = DateTimeFormatter.ofPattern("HH:mm:ss");
+    static DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     // helper print methods
     private static void print(String text) {System.out.println(text);}
@@ -33,8 +33,8 @@ public class App {
                 if (!input.equals("date|time|description|vendor|amount")) {
                     String[] lineSegment = input.split("\\|");
                     LocalDate localDate = LocalDate.parse(lineSegment[0]);
-
-                    Transaction transaction = new Transaction(localDate, lineSegment[1], lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
+                    LocalTime localTime = LocalTime.parse(lineSegment[1]);
+                    Transaction transaction = new Transaction(localDate, localTime, lineSegment[2], lineSegment[3], Double.parseDouble(lineSegment[4]));
                     transactionList.add(transaction);
                 }
             }
@@ -64,7 +64,7 @@ public class App {
         do {
             print("""
                 
-                === Main Account Menu ===
+                === Home ===
                 D) Add Deposit
                 P) Make Payment
                 L) Ledger
@@ -86,11 +86,11 @@ public class App {
         do {
             print("""
                 
-                === Ledger Menu ===
+                === Ledger ===
                 A) All
                 D) Deposits
                 P) Payments
-                R) Report
+                R) Reports
                 H) Home""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
@@ -114,13 +114,13 @@ public class App {
         do {
             print("""
                 
-                === Reports Menu ===
+                === Reports ===
                 1) Month To Date
                 2) Previous Month
                 3) Year To Date
                 4) Previous Year
                 5) Search by Vendor
-                0) back""");
+                0) Back""");
             print("enter Valid command here -> ",false);
             enteredCommand=scanner.nextLine().toLowerCase().trim();
 
@@ -333,11 +333,11 @@ public class App {
 
     // Misc methods
     private static void addToTransactionList(Transaction transaction) {
-        LocalTime today = LocalTime.now();
+        LocalTime localTime = LocalTime.now();
         LocalDate localDate = LocalDate.now();
 
         transaction.setDate(localDate);
-        transaction.setTime(today.format(formatHours));
+        transaction.setTime(LocalTime.parse(localTime.format(formatTime)));
         transactionList.add(transaction);
 
         writeFile();
@@ -363,5 +363,4 @@ public class App {
         }
         returnToMain();
     }
-
 }
