@@ -17,54 +17,72 @@
   1. if your in the `=== Home ===` menu then the listed commands are
    
        D for `D) Add Deposit`
+        -   this is where you will enter future deposits
 
        P for `P) Make Payment`
+        -   this is where you will enter future Payment
 
        L for `L) Ledger`
+        -   this will bring you to the Ledger menu
 
        X for `X) Exit`
+        -   this will End the program
 
 
 -
   2. if your in the `=== Ledger ===` menu then the listed commands are
    
        A for `A) All`
-   
-       D for `D) Deposits`
+     -   this will allow you to view all of your provided transaction history
 
-       P for `P) Payment`
-   
+       D for `D) Deposits`
+     -   this will allow you to view all of your provided deposit history
+
+     P for `P) Payment`
+     -   this will allow you to view all of your provided Payment history
+
        R for `R) Reports`
-   
+     -   this will take you to the Reports menu
+ 
        H for `H) Home`.
+     -   this will take you back to the Home menu
+
 
 
 - 
-  3. if your in the `=== Ledger ===` menu then the listed commands are
+  3. if your in the `=== Reports ===` menu then the listed commands are
 
        1 for `1) Month To Date`
+      -   this will show you all of your provided transaction history done for this month
 
        2 for `2) Previous Month`
+      -   this will show you all of your provided transaction history done for the previous month
 
        3 for `3) Year To Date`
+      -   this will show you all of your provided transaction history done for this year
 
        4 for `4) Previous Year`
+      -   this will show you all of your provided transaction history done for the previous year
 
        5 for `5) Search by Vendor`
-   
+      -   this will allow you to search for a list transactions done with a specific vendor 
+
        0 for `0) Back`
+      -   this will take you back to the Ledger menu
 
 
 2. how to add Deposit/Make Payment: you first need to be in the `=== Home ===` menu and enter your desired command (D to Add Deposit and P to Make Payment). 
 
-   -- when you entered the command it will prompt you to `enter description`(make sure to enter some kind of descriptive text or will not allow you to move on). 
+    -- when you entered the command it will prompt you to `enter description`(make sure to enter some kind of descriptive text or will not allow you to move on). 
 
-   -- After you entered the description it will prompt you for `enter vendor`(same as before make sure to enter text, or it won't allow you to move on)
+    -- After you entered the description it will prompt you for `enter vendor`(same as before make sure to enter text, or it won't allow you to move on)
 
-   -- After you entered the vendor it will prompt you to `enter amount`(make that you're just entering the number, because otherwise it will re-request the prompt)
+    -- After you entered the vendor it will prompt you to `enter amount`(make that you're just entering the number, because otherwise it will re-request the prompt)
+
+    
+- after you filled out all three prompts it will automatically add it to the transaction.csv file
 
 
-3. 
 - --
 ## Interesting code
 - --

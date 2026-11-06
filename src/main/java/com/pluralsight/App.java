@@ -350,17 +350,21 @@ public class App {
 
     // Misc display methods
     private static void displayAllReports() {
+        if (transactionList.isEmpty()) print("No transactions found");
         transactionList.forEach(transaction -> print(transaction.toRow()));
         returnToMain();
     }
     private static void displayVendorNamedItems() {
         print("Please enter name of vendor -> ",false);
         String enteredCommand = scanner.nextLine().toLowerCase().trim();
+        boolean hasTransaction = false;
 
         for (int i = 0; i <= transactionList.size()-1; i++) {
             String vendor = transactionList.get(i).getVendor().toLowerCase().trim();
+            hasTransaction = true;
             if (vendor.equals(enteredCommand)) {print(transactionList.get(i).toRow());}
         }
+        if (!hasTransaction) print("No transactions found");
         returnToMain();
     }
 }
