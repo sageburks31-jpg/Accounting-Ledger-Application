@@ -48,7 +48,6 @@
      -   this will take you back to the Home menu
 
 
-
 - 
   3. if your in the `=== Reports ===` menu then the listed commands are
 
@@ -117,11 +116,6 @@
     }
 } 
 ```
-#### Explanation of the Code shown above- 
-
-- v 
-- v
-- v
 - --
 ## Screenshots
 - --
