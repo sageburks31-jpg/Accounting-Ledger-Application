@@ -120,10 +120,10 @@
 ## Screenshots
 - --
 #### Shows how the console looks when ran-
-Context:
 
 <img alt="Screenshot 2026-11-04 at 9.13.49 AM.png" height="400" src="images/Screenshot%202026-11-04%20at%209.13.49%E2%80%AFAM.png" width="400"/>
 
-*this screenshot shows the main-menu being used to go to the Ledger-Menu. And the ledger-Menu being used to go to the Reports-Menu, with the Report Menu showing an "Error Invalid Command" response*
+Context:
+*this screenshot shows the main-menu was used to go to the Ledger-Menu. And the ledger-Menu being used to go to the Reports-Menu, with the Reports Menu showing an "Error Invalid Command" response after the user entered `Enter`/`Return`(if your on mac)*
 
 - --

@@ -351,7 +351,7 @@ public class App {
     // Misc display methods
     private static void displayAllReports() {
         if (transactionList.isEmpty()) print("No transactions found");
-        transactionList.forEach(transaction -> print(transaction.toRow()));
+        else transactionList.forEach(transaction -> print(transaction.toRow()));
         returnToMain();
     }
     private static void displayVendorNamedItems() {
